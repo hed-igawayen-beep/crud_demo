@@ -31,4 +31,18 @@ Public Class Form1
             MsgBox(ex.Message)
         End Try
     End Sub
+
+    Private Sub ButtonRead_Click(sender As Object, e As EventArgs) Handles ButtonRead.Click
+        Dim query As String = "SELECT * FROM crud_demo_db.students_tbl;" 'The * sign reads all the column
+        Try
+            Using conn As New MySqlConnection("server=localhost; userid=root; password=root; database=crud_demo_db;")
+                Dim adapter As New MySqlDataAdapter(query, conn) 'pag command may gustong ilagay pag adapater may gustong kunin
+                Dim table As New DataTable() 'table object
+                adapter.Fill(table) 'from adapter to table object
+                DataGridView1.DataSource = table 'diaplay  to datagridview
+            End Using
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
 End Class
