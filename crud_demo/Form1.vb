@@ -45,4 +45,43 @@ Public Class Form1
             MsgBox(ex.Message)
         End Try
     End Sub
+
+    Private Sub ButtonUpdate_Click(sender As Object, e As EventArgs) Handles ButtonUpdate.Click
+        Dim query As String = "UPDATE students_tbl SET name=@name, age=@age, email=@email WHERE id=@id"
+        Try
+            Using conn As New MySqlConnection("server=localhost; userid=root; password=root; database=crud_demo_db;")
+                conn.Open()
+                Using cmd As New MySqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@name", TextBoxName.Text)
+                    cmd.Parameters.AddWithValue("@age", CInt(TextBoxAge.Text))
+                    cmd.Parameters.AddWithValue("@email", TextBoxEmail.Text)
+                    ' Assuming you have the selected record's ID in a variable, for example from DataGridView selection:
+                    Dim selectedId As Integer = CInt(DataGridView1.CurrentRow.Cells("id").Value)
+                    cmd.Parameters.AddWithValue("@id", selectedId)
+                    cmd.ExecuteNonQuery()
+                    MessageBox.Show("Record updated successfully!")
+                End Using
+            End Using
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub ButtonDelete_Click(sender As Object, e As EventArgs) Handles ButtonDelete.Click
+        Dim query As String = "DELETE FROM students_tbl WHERE id=@id"
+        Try
+            Using conn As New MySqlConnection("server=localhost; userid=root; password=root; database=crud_demo_db;")
+                conn.Open()
+                Using cmd As New MySqlCommand(query, conn)
+                    ' Get the selected record ID from DataGridView
+                    Dim selectedId As Integer = CInt(DataGridView1.CurrentRow.Cells("id").Value)
+                    cmd.Parameters.AddWithValue("@id", selectedId)
+                    cmd.ExecuteNonQuery()
+                    MessageBox.Show("Record deleted successfully!")
+                End Using
+            End Using
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
 End Class
